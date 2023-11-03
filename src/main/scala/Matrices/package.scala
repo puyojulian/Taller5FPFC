@@ -66,4 +66,18 @@ package object Matrices {
     val posJ = j
     Vector.tabulate(l,l)((i,j) => m(i+posI)(j+posJ))
   }
+
+  def sumMatriz(m1: Matriz, m2: Matriz): Matriz = {
+    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
+    // y de vuelve la matriz resultante de la suma de las 2 matrices
+    val l = m1.length
+    Vector.tabulate(l,l)((i,j) => m1(i)(j)+m2(i)(j))
+  }
+
+  def negMatriz(m1: Matriz): Matriz = { // convierte cada a(i,j) en -a(i,j)
+    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
+    // y de vuelve la matriz resultante de la suma de las 2 matrices
+    val l = m1.length
+    Vector.tabulate(l, l)((i, j) => -m1(i)(j))
+  }
 }

@@ -11,3 +11,6 @@ val m1_00 = subMatriz(m1,0,0,6)
 val m1_06 = subMatriz(m1,0,6,6)
 val m1_60 = subMatriz(m1,6,0,6)
 val m1_66 = subMatriz(m1,6,6,6)
+
+val suma = sumMatriz(m1,m2)
+m1 == sumMatriz(suma,negMatriz(m2))
