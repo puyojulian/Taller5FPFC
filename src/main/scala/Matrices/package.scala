@@ -32,4 +32,11 @@ package object Matrices {
     // A ser usada en el punto 1.5
     (v1 zip v2).map({case (i, j) => (i*j)}).sum
   }
+
+  def multMatriz(m1: Matriz, m2: Matriz): Matriz = {
+    val m2T = transpuesta(m2)
+    val l = m1.length
+    val c = Vector.tabulate(l, l)((i, j) => prodPunto(m1(i),m2T(j)))
+    c
+  }
 }
