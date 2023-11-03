@@ -58,4 +58,12 @@ package object Matrices {
     val c = c1++c2
     c
   }
+
+  def subMatriz(m: Matriz, i: Int, j: Int, l: Int): Matriz = {
+    // Dada m, mat r i z cuadrada de NxN, 1<=i , j<=N, i+n<=N, j+n<=N,
+    // devuelve la submatriz de nxn correspondiente a m[i..i+(n-1), j..j+(n-1)]
+    val posI = i
+    val posJ = j
+    Vector.tabulate(l,l)((i,j) => m(i+posI)(j+posJ))
+  }
 }
