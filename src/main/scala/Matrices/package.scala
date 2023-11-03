@@ -80,4 +80,21 @@ package object Matrices {
     val l = m1.length
     Vector.tabulate(l, l)((i, j) => -m1(i)(j))
   }
+
+  def multMatrizRec(m1: Matriz, m2: Matriz): Matriz = {
+    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
+    // y devuelve la multiplicacion de las 2 matrices
+    val l = m1.length
+    val mid = l/2
+    if (l == 2) {
+      multMatriz(m1,m2)
+    }
+    else {
+      val c_00 = sumMatriz(multMatrizRec(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRec(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, 0, mid)))
+      val c_0mid = sumMatriz(multMatrizRec(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRec(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, mid, mid)))
+      val c_mid0 = sumMatriz(multMatrizRec(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRec(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, 0, mid)))
+      val c_midmid = sumMatriz(multMatrizRec(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRec(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, mid, mid)))
+      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map {case (row1, row2) => row1 ++ row2}
+    }
+  }
 }
