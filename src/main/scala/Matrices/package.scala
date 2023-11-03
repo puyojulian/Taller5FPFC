@@ -39,4 +39,23 @@ package object Matrices {
     val c = Vector.tabulate(l, l)((i, j) => prodPunto(m1(i),m2T(j)))
     c
   }
+
+  def multMatrizPar(m1: Matriz, m2: Matriz): Matriz = {
+    val (m2T:Matriz,l:Int) = parallel(transpuesta(m2),m1.length)
+    val middle = l/2
+    val (c1:Matriz, c2:Matriz) = {
+      if (l % 2 == 0)
+        parallel(
+          Vector.tabulate(middle, l)((i, j) => prodPunto(m1(i), m2T(j))),
+          Vector.tabulate(middle, l)((i, j) => prodPunto(m1(i + middle), m2T(j)))
+        )
+      else
+        parallel(
+          Vector.tabulate(middle + 1, l)((i, j) => prodPunto(m1(i), m2T(j))),
+          Vector.tabulate(middle, l)((i, j) => prodPunto(m1(i + middle + 1), m2T(j)))
+        )
+    }
+    val c = c1++c2
+    c
+  }
 }
