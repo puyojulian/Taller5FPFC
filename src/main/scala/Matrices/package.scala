@@ -97,7 +97,7 @@ package object Matrices {
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 2
+    val umbral = 8
     val threshold = {
       if (l <= umbral)
         l
@@ -109,10 +109,10 @@ package object Matrices {
       multMatrizRec(m1, m2)
     }
     else {
-      val (m1_00_m2_00, m1_0mid_m2_mid0) = parallel(multMatrizRec(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRec(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, 0, mid)))
-      val (m1_00_m2_0mid, m1_0mid_m2_midmid) = parallel(multMatrizRec(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRec(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, mid, mid)))
-      val (m1_mid0_m2_00, m1_midmid_m2_mid0) = parallel(multMatrizRec(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRec(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, 0, mid)))
-      val (m1_mid0_m2_0mid, m1_midmid_m2_midmid) = parallel(multMatrizRec(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRec(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, mid, mid)))
+      val (m1_00_m2_00, m1_0mid_m2_mid0) = parallel(multMatrizRecPar(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRecPar(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, 0, mid)))
+      val (m1_00_m2_0mid, m1_0mid_m2_midmid) = parallel(multMatrizRecPar(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRecPar(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, mid, mid)))
+      val (m1_mid0_m2_00, m1_midmid_m2_mid0) = parallel(multMatrizRecPar(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, 0, mid)), multMatrizRecPar(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, 0, mid)))
+      val (m1_mid0_m2_0mid, m1_midmid_m2_midmid) = parallel(multMatrizRecPar(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, mid, mid)), multMatrizRecPar(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, mid, mid)))
 
       val c_00 = sumMatriz(m1_00_m2_00, m1_0mid_m2_mid0)
       val c_0mid = sumMatriz(m1_00_m2_0mid, m1_0mid_m2_midmid)
@@ -129,7 +129,7 @@ package object Matrices {
     Vector.tabulate(l,l)((i,j) => m1(i)(j)-m2(i)(j))
   }
 
-  def multStrassen(m1: Matriz, m2: Matriz): Matriz = {
+  def multStrassenPrelim(m1: Matriz, m2: Matriz): Matriz = {
     // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
     // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen
     val l = m1.length
@@ -138,11 +138,11 @@ package object Matrices {
       multMatriz(m1, m2)
     }
     else {
-      val (m1_00_m2_0mid, m1_00_m2_midmid) = (multStrassen(subMatriz(m1,0,0,mid), subMatriz(m2,0,mid,mid)), multStrassen(subMatriz(m1,0,0,mid), subMatriz(m2,mid,mid,mid)))
-      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = (multStrassen(subMatriz(m1,0,mid,mid), subMatriz(m2,mid,mid,mid)), multStrassen(subMatriz(m1,mid,0,mid), subMatriz(m2,0,0,mid)))
-      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = (multStrassen(subMatriz(m1,mid,mid,mid), subMatriz(m2,0,0,mid)), multStrassen(subMatriz(m1,mid,mid,mid), subMatriz(m2,mid,mid,mid)))
-      val (m1_midmid_m2_mid0, m1_00_m2_00) = (multStrassen(subMatriz(m1,mid,mid,mid), subMatriz(m2,mid,0,mid)), multStrassen(subMatriz(m1,0,0,mid), subMatriz(m2,0,0,mid)))
-      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = (multStrassen(subMatriz(m1,0,mid,mid), subMatriz(m2,mid,0,mid)), multStrassen(subMatriz(m1,mid,0,mid), subMatriz(m2,0,mid,mid)))
+      val (m1_00_m2_0mid, m1_00_m2_midmid) = (multStrassenPrelim(subMatriz(m1,0,0,mid), subMatriz(m2,0,mid,mid)), multStrassenPrelim(subMatriz(m1,0,0,mid), subMatriz(m2,mid,mid,mid)))
+      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = (multStrassenPrelim(subMatriz(m1,0,mid,mid), subMatriz(m2,mid,mid,mid)), multStrassenPrelim(subMatriz(m1,mid,0,mid), subMatriz(m2,0,0,mid)))
+      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = (multStrassenPrelim(subMatriz(m1,mid,mid,mid), subMatriz(m2,0,0,mid)), multStrassenPrelim(subMatriz(m1,mid,mid,mid), subMatriz(m2,mid,mid,mid)))
+      val (m1_midmid_m2_mid0, m1_00_m2_00) = (multStrassenPrelim(subMatriz(m1,mid,mid,mid), subMatriz(m2,mid,0,mid)), multStrassenPrelim(subMatriz(m1,0,0,mid), subMatriz(m2,0,0,mid)))
+      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = (multStrassenPrelim(subMatriz(m1,0,mid,mid), subMatriz(m2,mid,0,mid)), multStrassenPrelim(subMatriz(m1,mid,0,mid), subMatriz(m2,0,mid,mid)))
 
       val p1 = restaMatriz(m1_00_m2_0mid, m1_00_m2_midmid)
       val p2 = sumMatriz(m1_00_m2_midmid, m1_0mid_m2_midmid)
@@ -160,13 +160,13 @@ package object Matrices {
     }
   }
 
-  def multStrassenPar(m1: Matriz, m2: Matriz): Matriz = {
+  def multStrassenPrelimPar(m1: Matriz, m2: Matriz): Matriz = {
     // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
     // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen en paralelo
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 2
+    val umbral = 8
     val threshold = {
       if (l <= umbral)
         l
@@ -175,14 +175,14 @@ package object Matrices {
     }
 
     if (l == threshold) { // 'threshold' define si se usa el algoritmo secuencial o paralelo.
-      multStrassen(m1, m2)
+      multStrassenPrelim(m1, m2)
     }
     else {
-      val (m1_00_m2_0mid, m1_00_m2_midmid) = parallel(multStrassen(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, mid, mid)), multStrassen(subMatriz(m1, 0, 0, mid), subMatriz(m2, mid, mid, mid)))
-      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = parallel(multStrassen(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, mid, mid)), multStrassen(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, 0, mid)))
-      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = parallel(multStrassen(subMatriz(m1, mid, mid, mid), subMatriz(m2, 0, 0, mid)), multStrassen(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, mid, mid)))
-      val (m1_midmid_m2_mid0, m1_00_m2_00) = parallel(multStrassen(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, 0, mid)), multStrassen(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, 0, mid)))
-      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = parallel(multStrassen(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, 0, mid)), multStrassen(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, mid, mid)))
+      val (m1_00_m2_0mid, m1_00_m2_midmid) = parallel(multStrassenPrelimPar(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, mid, mid)), multStrassenPrelimPar(subMatriz(m1, 0, 0, mid), subMatriz(m2, mid, mid, mid)))
+      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = parallel(multStrassenPrelimPar(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, mid, mid)), multStrassenPrelimPar(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, 0, mid)))
+      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = parallel(multStrassenPrelimPar(subMatriz(m1, mid, mid, mid), subMatriz(m2, 0, 0, mid)), multStrassenPrelimPar(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, mid, mid)))
+      val (m1_midmid_m2_mid0, m1_00_m2_00) = parallel(multStrassenPrelimPar(subMatriz(m1, mid, mid, mid), subMatriz(m2, mid, 0, mid)), multStrassenPrelimPar(subMatriz(m1, 0, 0, mid), subMatriz(m2, 0, 0, mid)))
+      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = parallel(multStrassenPrelimPar(subMatriz(m1, 0, mid, mid), subMatriz(m2, mid, 0, mid)), multStrassenPrelimPar(subMatriz(m1, mid, 0, mid), subMatriz(m2, 0, mid, mid)))
 
       val p1 = restaMatriz(m1_00_m2_0mid, m1_00_m2_midmid)
       val p2 = sumMatriz(m1_00_m2_midmid, m1_0mid_m2_midmid)
@@ -191,6 +191,71 @@ package object Matrices {
       val p5 = sumMatriz(sumMatriz(m1_00_m2_00, m1_00_m2_midmid), sumMatriz(m1_midmid_m2_00, m1_midmid_m2_midmid))
       val p6 = restaMatriz(restaMatriz(sumMatriz(m1_0mid_m2_mid0, m1_0mid_m2_midmid), m1_midmid_m2_mid0), m1_midmid_m2_midmid)
       val p7 = restaMatriz(restaMatriz(sumMatriz(m1_00_m2_00, m1_00_m2_0mid), m1_mid0_m2_00), m1_mid0_m2_0mid)
+
+      val c_00 = sumMatriz(restaMatriz(sumMatriz(p5, p4), p2), p6)
+      val c_0mid = sumMatriz(p1, p2)
+      val c_mid0 = sumMatriz(p3, p4)
+      val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5, p1), p3), p7)
+      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
+    }
+  }
+
+  def multStrassen(m1: Matriz, m2: Matriz): Matriz = {
+    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
+    // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen
+    val l = m1.length
+    val mid = l / 2
+    if (l == 2 || l == 1) {
+      multMatriz(m1, m2)
+    }
+    else {
+      val (s1, s2) = (restaMatriz(subMatriz(m2, 0, mid, mid), subMatriz(m2, mid, mid, mid)), sumMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, 0, mid, mid)))
+      val (s3, s4) = (sumMatriz(subMatriz(m1, mid, 0, mid), subMatriz(m1, mid, mid, mid)), restaMatriz(subMatriz(m2, mid, 0, mid), subMatriz(m2, 0, 0, mid)))
+      val (s5, s6) = (sumMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, mid, mid, mid)), sumMatriz(subMatriz(m2, 0, 0, mid), subMatriz(m2, mid, mid, mid)))
+      val (s7, s8) = (restaMatriz(subMatriz(m1, 0, mid, mid), subMatriz(m1, mid, mid, mid)), sumMatriz(subMatriz(m2, mid, 0, mid), subMatriz(m2, mid, mid, mid)))
+      val (s9, s10) = (restaMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, mid, 0, mid)), sumMatriz(subMatriz(m2, 0, 0, mid), subMatriz(m2, 0, mid, mid)))
+
+      val (p1, p2) = (multStrassen(subMatriz(m1, 0, 0, mid), s1), multStrassen(s2, subMatriz(m2, mid, mid, mid)))
+      val (p3, p4) = (multStrassen(s3, subMatriz(m2, 0, 0, mid)), multStrassen(subMatriz(m1, mid, mid, mid), s4))
+      val (p5, p6) = (multStrassen(s5, s6), multStrassen(s7, s8))
+      val p7 = multStrassen(s9, s10)
+
+      val c_00 = sumMatriz(restaMatriz(sumMatriz(p5, p4), p2), p6)
+      val c_0mid = sumMatriz(p1, p2)
+      val c_mid0 = sumMatriz(p3, p4)
+      val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5, p1), p3), p7)
+      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
+    }
+  }
+
+  def multStrassenPar(m1: Matriz, m2: Matriz): Matriz = {
+    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
+    // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen
+    val l = m1.length
+    val mid = l / 2
+
+    val umbral = 8
+    val threshold = {
+      if (l <= umbral)
+        l
+      else
+        umbral
+    }
+
+    if (l == threshold) {
+      multStrassen(m1, m2)
+    }
+    else {
+      val (s1, s2) = parallel(restaMatriz(subMatriz(m2, 0, mid, mid), subMatriz(m2, mid, mid, mid)), sumMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, 0, mid, mid)))
+      val (s3, s4) = parallel(sumMatriz(subMatriz(m1, mid, 0, mid), subMatriz(m1, mid, mid, mid)), restaMatriz(subMatriz(m2, mid, 0, mid), subMatriz(m2, 0, 0, mid)))
+      val (s5, s6) = parallel(sumMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, mid, mid, mid)), sumMatriz(subMatriz(m2, 0, 0, mid), subMatriz(m2, mid, mid, mid)))
+      val (s7, s8) = parallel(restaMatriz(subMatriz(m1, 0, mid, mid), subMatriz(m1, mid, mid, mid)), sumMatriz(subMatriz(m2, mid, 0, mid), subMatriz(m2, mid, mid, mid)))
+      val (s9, s10) = parallel(restaMatriz(subMatriz(m1, 0, 0, mid), subMatriz(m1, mid, 0, mid)), sumMatriz(subMatriz(m2, 0, 0, mid), subMatriz(m2, 0, mid, mid)))
+
+      val (p1, p2) = parallel(multStrassenPar(subMatriz(m1, 0, 0, mid), s1), multStrassenPar(s2, subMatriz(m2, mid, mid, mid)))
+      val (p3, p4) = parallel(multStrassenPar(s3, subMatriz(m2, 0, 0, mid)), multStrassenPar(subMatriz(m1, mid, mid, mid), s4))
+      val (p5, p6) = parallel(multStrassenPar(s5, s6), multStrassenPar(s7, s8))
+      val p7 = multStrassenPar(s9, s10)
 
       val c_00 = sumMatriz(restaMatriz(sumMatriz(p5, p4), p2), p6)
       val c_0mid = sumMatriz(p1, p2)
