@@ -97,7 +97,7 @@ package object Matrices {
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 8
+    val umbral = 16
     val threshold = {
       if (l <= umbral)
         l
@@ -234,7 +234,7 @@ package object Matrices {
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 8
+    val umbral = 16
     val threshold = {
       if (l <= umbral)
         l
