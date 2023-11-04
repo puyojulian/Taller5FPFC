@@ -1,15 +1,19 @@
 import Matrices._
 
-val m1 = matrizAlAzar(16,6)
-val m2 = matrizAlAzar(16,6)
+val m1 = matrizAlAzar(32,6)
+val m2 = matrizAlAzar(32,6)
 
 val m1m2 = multMatriz(m1,m2)
 val m1m2Par = multMatrizPar(m1,m2)
 val m1m2Rec = multMatrizRec(m1,m2)
 val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
 m1m2 == m1m2Par
 m1m2 == m1m2Rec
 m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
 
 val mid = m1.length/2
 val m1_00 = subMatriz(m1,0,0,mid)
