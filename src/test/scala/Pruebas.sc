@@ -1,12 +1,12 @@
 import Benchmark._
 import Matrices._
 
-//for {
-//  i <- 1 to 8
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
-//  math.pow(2, i).toInt)
+for {
+  i <- 1 to 8
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
+  math.pow(2, i).toInt)
 
 for {
   i <- 1 to 8
