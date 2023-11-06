@@ -1,27 +1,27 @@
 import Benchmark._
 import Matrices._
 
-//// Comparación entre los algoritmos secuenciales con sus paralelos respectivos.
-//for {
-//  i <- 1 to 8
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 8
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 8
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multStrassen,multStrassenPar)(m1,m2),
-//  math.pow(2, i).toInt)
+// Comparación entre los algoritmos secuenciales con sus paralelos respectivos.
+for {
+  i <- 1 to 8
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
+  math.pow(2, i).toInt)
+
+for {
+  i <- 1 to 8
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
+  math.pow(2, i).toInt)
+
+for {
+  i <- 1 to 8
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multStrassen,multStrassenPar)(m1,m2),
+  math.pow(2, i).toInt)
 
 // Comparación entre los algoritmos secuenciales.
 for {
@@ -181,3 +181,18 @@ m1m2 == m1m2StrassenPrelimPar
 // Se verifica que la suma y resta sean coherentes.
 val suma = sumMatriz(m1,m2)
 m1 == restaMatriz(suma,m2)
+
+// Punto 1.5, Implementando el producto punto usando paralelismo de datos.
+compararProdPunto(2)
+compararProdPunto(16)
+compararProdPunto(32)
+compararProdPunto(128)
+compararProdPunto(256)
+compararProdPunto(1024)
+compararProdPunto(2048)
+compararProdPunto(4096)
+compararProdPunto(8192)
+compararProdPunto(16384)
+compararProdPunto(32768)
+compararProdPunto(65536)
+compararProdPunto(131072)
