@@ -40,6 +40,7 @@ package object Matrices {
     val c = Vector.tabulate(l, l)((i, j) => prodPunto(m1(i),m2T(j)))
     c
   }
+
   // Ejercicio 1.1.2
   def multMatrizPar(m1: Matriz, m2: Matriz): Matriz = {
     val (m2T:Matriz,l:Int) = parallel(transpuesta(m2),m1.length)
