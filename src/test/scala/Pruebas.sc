@@ -1,195 +1,167 @@
 import Benchmark._
 import Matrices._
 
+// Caso de prueba: Matrices de tamaño 2x2
+val m1 = matrizAlAzar(2, 2)
+val m2 = matrizAlAzar(2, 2)
+val m1m2 = multMatriz(m1,m2)
+val m1m2Par = multMatrizPar(m1,m2)
+val m1m2Rec = multMatrizRec(m1,m2)
+val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
+// Se verifica que todas las funciones den lo mismo.
+m1m2 == m1m2Par
+m1m2 == m1m2Rec
+m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
+// Se verifica que la suma y resta sean coherentes.
+val suma = sumMatriz(m1,m2)
+m1 == restaMatriz(suma,m2)
+
+// Caso de prueba: Matrices de tamaño 8x8
+val m1 = matrizAlAzar(8, 2)
+val m2 = matrizAlAzar(8, 2)
+val m1m2 = multMatriz(m1,m2)
+val m1m2Par = multMatrizPar(m1,m2)
+val m1m2Rec = multMatrizRec(m1,m2)
+val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
+// Se verifica que todas las funciones den lo mismo.
+m1m2 == m1m2Par
+m1m2 == m1m2Rec
+m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
+// Se verifica que la suma y resta sean coherentes.
+val suma = sumMatriz(m1,m2)
+m1 == restaMatriz(suma,m2)
+
+// Caso de prueba: Matrices de tamaño 64x64
+val m1 = matrizAlAzar(64, 2)
+val m2 = matrizAlAzar(64, 2)
+val m1m2 = multMatriz(m1,m2)
+val m1m2Par = multMatrizPar(m1,m2)
+val m1m2Rec = multMatrizRec(m1,m2)
+val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
+// Se verifica que todas las funciones den lo mismo.
+m1m2 == m1m2Par
+m1m2 == m1m2Rec
+m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
+// Se verifica que la suma y resta sean coherentes.
+val suma = sumMatriz(m1,m2)
+m1 == restaMatriz(suma,m2)
+
+// Caso de prueba: Matrices de tamaño 256x256
+val m1 = matrizAlAzar(256, 2)
+val m2 = matrizAlAzar(256, 2)
+val m1m2 = multMatriz(m1,m2)
+val m1m2Par = multMatrizPar(m1,m2)
+val m1m2Rec = multMatrizRec(m1,m2)
+val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
+// Se verifica que todas las funciones den lo mismo.
+m1m2 == m1m2Par
+m1m2 == m1m2Rec
+m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
+// Se verifica que la suma y resta sean coherentes.
+val suma = sumMatriz(m1,m2)
+m1 == restaMatriz(suma,m2)
+
+// Caso de prueba: Matrices de tamaño 512x512
+val m1 = matrizAlAzar(512, 2)
+val m2 = matrizAlAzar(512, 2)
+val m1m2 = multMatriz(m1,m2)
+val m1m2Par = multMatrizPar(m1,m2)
+val m1m2Rec = multMatrizRec(m1,m2)
+val m1m2RecPar = multMatrizRecPar(m1,m2)
+val m1m2Strassen = multStrassen(m1,m2)
+val m1m2StrassenPar = multStrassenPar(m1,m2)
+// Se verifica que todas las funciones den lo mismo.
+m1m2 == m1m2Par
+m1m2 == m1m2Rec
+m1m2 == m1m2RecPar
+m1m2 == m1m2Strassen
+m1m2 == m1m2StrassenPar
+// Se verifica que la suma y resta sean coherentes.
+val suma = sumMatriz(m1,m2)
+m1 == restaMatriz(suma,m2)
+
+
 // Comparación entre los algoritmos secuenciales con sus paralelos respectivos.
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
-//  math.pow(2, i).toInt)
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatriz, multMatrizPar)(m1,m2),
+  math.pow(2, i).toInt)
 
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
-//  math.pow(2, i).toInt)
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizRec,multMatrizRecPar)(m1,m2),
+  math.pow(2, i).toInt)
 
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multStrassen,multStrassenPar)(m1,m2),
-//  math.pow(2, i).toInt)
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multStrassen,multStrassenPar)(m1,m2),
+  math.pow(2, i).toInt)
 
-//// Comparación entre los algoritmos secuenciales.
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatriz,multMatrizRec)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRec,multStrassen)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatriz,multStrassen)(m1,m2),
-//  math.pow(2, i).toInt)
+// Comparación entre los algoritmos secuenciales.
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatriz,multMatrizRec)(m1,m2),
+  math.pow(2, i).toInt)
 
-//// Comparación entre algoritmos paralelos.
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizPar,multMatrizRecPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizRecPar,multStrassenPar)(m1,m2),
-//  math.pow(2, i).toInt)
-//
-//for {
-//  i <- 1 to 10
-//  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
-//} yield (compararAlgoritmos(multMatrizPar,multStrassenPar)(m1,m2),
-//  math.pow(2, i).toInt)
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizRec,multStrassen)(m1,m2),
+  math.pow(2, i).toInt)
 
-//// Caso de prueba: Matrices de tamaño 2x2
-//val m1 = matrizAlAzar(2, 2)
-//val m2 = matrizAlAzar(2, 2)
-//val m1m2 = multMatriz(m1,m2)
-//val m1m2Par = multMatrizPar(m1,m2)
-//val m1m2Rec = multMatrizRec(m1,m2)
-//val m1m2RecPar = multMatrizRecPar(m1,m2)
-//val m1m2Strassen = multStrassen(m1,m2)
-//val m1m2StrassenPar = multStrassenPar(m1,m2)
-//// Se verifica que todas las funciones den lo mismo.
-//m1m2 == m1m2Par
-//m1m2 == m1m2Rec
-//m1m2 == m1m2RecPar
-//m1m2 == m1m2Strassen
-//m1m2 == m1m2StrassenPar
-//// Se verifica que la suma y resta sean coherentes.
-//val suma = sumMatriz(m1,m2)
-//m1 == restaMatriz(suma,m2)
-//
-//// Caso de prueba: Matrices de tamaño 8x8
-//val m1 = matrizAlAzar(8, 2)
-//val m2 = matrizAlAzar(8, 2)
-//val m1m2 = multMatriz(m1,m2)
-//val m1m2Par = multMatrizPar(m1,m2)
-//val m1m2Rec = multMatrizRec(m1,m2)
-//val m1m2RecPar = multMatrizRecPar(m1,m2)
-//val m1m2Strassen = multStrassen(m1,m2)
-//val m1m2StrassenPar = multStrassenPar(m1,m2)
-//// Se verifica que todas las funciones den lo mismo.
-//m1m2 == m1m2Par
-//m1m2 == m1m2Rec
-//m1m2 == m1m2RecPar
-//m1m2 == m1m2Strassen
-//m1m2 == m1m2StrassenPar
-//// Se verifica que la suma y resta sean coherentes.
-//val suma = sumMatriz(m1,m2)
-//m1 == restaMatriz(suma,m2)
-//
-//// Caso de prueba: Matrices de tamaño 64x64
-//val m1 = matrizAlAzar(64, 2)
-//val m2 = matrizAlAzar(64, 2)
-//val m1m2 = multMatriz(m1,m2)
-//val m1m2Par = multMatrizPar(m1,m2)
-//val m1m2Rec = multMatrizRec(m1,m2)
-//val m1m2RecPar = multMatrizRecPar(m1,m2)
-//val m1m2Strassen = multStrassen(m1,m2)
-//val m1m2StrassenPar = multStrassenPar(m1,m2)
-//// Se verifica que todas las funciones den lo mismo.
-//m1m2 == m1m2Par
-//m1m2 == m1m2Rec
-//m1m2 == m1m2RecPar
-//m1m2 == m1m2Strassen
-//m1m2 == m1m2StrassenPar
-//// Se verifica que la suma y resta sean coherentes.
-//val suma = sumMatriz(m1,m2)
-//m1 == restaMatriz(suma,m2)
-//
-//// Caso de prueba: Matrices de tamaño 256x256
-//val m1 = matrizAlAzar(256, 2)
-//val m2 = matrizAlAzar(256, 2)
-//val m1m2 = multMatriz(m1,m2)
-//val m1m2Par = multMatrizPar(m1,m2)
-//val m1m2Rec = multMatrizRec(m1,m2)
-//val m1m2RecPar = multMatrizRecPar(m1,m2)
-//val m1m2Strassen = multStrassen(m1,m2)
-//val m1m2StrassenPar = multStrassenPar(m1,m2)
-//// Se verifica que todas las funciones den lo mismo.
-//m1m2 == m1m2Par
-//m1m2 == m1m2Rec
-//m1m2 == m1m2RecPar
-//m1m2 == m1m2Strassen
-//m1m2 == m1m2StrassenPar
-//// Se verifica que la suma y resta sean coherentes.
-//val suma = sumMatriz(m1,m2)
-//m1 == restaMatriz(suma,m2)
-//
-//// Caso de prueba: Matrices de tamaño 512x512
-//val m1 = matrizAlAzar(512, 2)
-//val m2 = matrizAlAzar(512, 2)
-//val m1m2 = multMatriz(m1,m2)
-//val m1m2Par = multMatrizPar(m1,m2)
-//val m1m2Rec = multMatrizRec(m1,m2)
-//val m1m2RecPar = multMatrizRecPar(m1,m2)
-//val m1m2Strassen = multStrassen(m1,m2)
-//val m1m2StrassenPar = multStrassenPar(m1,m2)
-//// Se verifica que todas las funciones den lo mismo.
-//m1m2 == m1m2Par
-//m1m2 == m1m2Rec
-//m1m2 == m1m2RecPar
-//m1m2 == m1m2Strassen
-//m1m2 == m1m2StrassenPar
-//// Se verifica que la suma y resta sean coherentes.
-//val suma = sumMatriz(m1,m2)
-//m1 == restaMatriz(suma,m2)
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatriz,multStrassen)(m1,m2),
+  math.pow(2, i).toInt)
 
-//// Punto 1.5, Implementando el producto punto usando paralelismo de datos.
-//compararProdPunto(2)
-//compararProdPunto(16)
-//compararProdPunto(32)
-//compararProdPunto(128)
-//compararProdPunto(256)
-//compararProdPunto(1024)
-//compararProdPunto(2048)
-//compararProdPunto(4096)
-//compararProdPunto(8192)
-//compararProdPunto(16384)
-//compararProdPunto(32768)
-//compararProdPunto(65536)
-//compararProdPunto(131072)
+// Comparación entre algoritmos paralelos.
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizPar,multMatrizRecPar)(m1,m2),
+  math.pow(2, i).toInt)
+
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizRecPar,multStrassenPar)(m1,m2),
+  math.pow(2, i).toInt)
+
+for {
+  i <- 1 to 10
+  m1 = matrizAlAzar(math.pow(2, i).toInt, 2)
+  m2 = matrizAlAzar(math.pow(2, i).toInt, 2)
+} yield (compararAlgoritmos(multMatrizPar,multStrassenPar)(m1,m2),
+  math.pow(2, i).toInt)
 
 
 //RESULTADOS REGISTRADOS OBTENIDOS Y SUS RESULTADOS COMPARATIVOS.
@@ -284,7 +256,41 @@ val r1: IndexedSeq[((Double, Double, Double), Int)] =
 
 // con umbral = 4:
 
-//...
+val r2: IndexedSeq[((Double, Double, Double), Int)] =
+  Vector(((0.0145,0.0241,0.6016597510373445),2),
+    ((0.0333,0.1421,0.23434201266713584),4),
+    ((0.1715,0.1198,1.4315525876460768),8),
+    ((0.8637,0.3159,2.7340930674264006),16),
+    ((6.4899,2.3561,2.754509570901065),32),
+    ((53.5021,17.9117,2.986991742827314),64),
+    ((441.6521,141.4063,3.123284464694996),128),
+    ((3425.8259,1142.5249,2.998469355022372),256),
+    ((27485.6406,9121.9758,3.0131236042086407),512),
+    ((220053.506,72394.4904,3.0396443815564176),1024))
+
+val r3: IndexedSeq[((Double, Double, Double), Int)] =
+  Vector(((0.0019,0.0018,1.0555555555555556),2),
+    ((0.0129,0.0128,1.0078125),4),
+    ((0.1051,0.0805,1.3055900621118013),8),
+    ((0.8377,0.3429,2.4429862933799944),16),
+    ((7.2439,2.5745,2.8137114002718975),32),
+    ((54.3564,17.5772,3.092437930956011),64),
+    ((430.8232,142.7192,3.0186772347378628),128),
+    ((3455.6864,1128.9374,3.061007988574034),256),
+    ((27421.608,8961.4008,3.059968928072049),512),
+    ((220173.0518,72490.5759,3.0372644866792955),1024))
+
+val r4: IndexedSeq[((Double, Double, Double), Int)] =
+  Vector(((0.0354,0.0137,2.5839416058394162),2),
+    ((0.1613,0.0844,1.9111374407582937),4),
+    ((0.5727,0.5445,1.0517906336088154),8),
+    ((1.2409,0.604,2.0544701986754967),16),
+    ((5.2373,2.3092,2.268014896934003),32),
+    ((46.2508,21.2734,2.174114151945622),64),
+    ((382.7379,135.1408,2.832141736618401),128),
+    ((3081.233,1154.4169,2.6690816809767774),256),
+    ((24545.3418,8863.0016,2.7694163792094995),512),
+    ((196570.4254,71447.9345,2.7512401411688114),1024))
 
 // compararAlgoritmos(multStrassen,multStrassenPar)(m1,m2)
 
@@ -355,16 +361,16 @@ val s4: IndexedSeq[((Double, Double, Double), Int)] =
 // Estandar vs. Recursivo
 (e0 zip r0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
 (e1 zip r1).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(e2 zip r2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(e3 zip r3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(e4 zip r4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(e2 zip r2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(e3 zip r3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(e4 zip r4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
 
 // Recursivo vs. Strassen
 (r0 zip s0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
 (r1 zip s1).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(r2 zip s2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(r3 zip s3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
-//(r4 zip s4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(r2 zip s2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(r3 zip s3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
+(r4 zip s4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
 
 // Estandar vs. Strassen
 (e0 zip s0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v1,w1,v1/w1),w)}
@@ -379,16 +385,16 @@ val s4: IndexedSeq[((Double, Double, Double), Int)] =
 // Estandar vs. Recursivo
 (e0 zip r0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 (e1 zip r1).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(e2 zip r2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(e3 zip r3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(e4 zip r4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(e2 zip r2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(e3 zip r3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(e4 zip r4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 
 // Recursivo vs. Strassen
 (r0 zip s0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 (r1 zip s1).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(r2 zip s2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(r3 zip s3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
-//(r4 zip s4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(r2 zip s2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(r3 zip s3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+(r4 zip s4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 
 // Estandar vs. Strassen
 (e0 zip s0).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
@@ -396,3 +402,19 @@ val s4: IndexedSeq[((Double, Double, Double), Int)] =
 (e2 zip s2).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 (e3 zip s3).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
 (e4 zip s4).map{case (((v1,v2,v3),v),((w1,w2,w3),w)) => ((v2,w2,v2/w2),w)}
+
+
+// Punto 1.5, Implementando el producto punto usando paralelismo de datos.
+compararProdPunto(2)
+compararProdPunto(16)
+compararProdPunto(32)
+compararProdPunto(128)
+compararProdPunto(256)
+compararProdPunto(1024)
+compararProdPunto(2048)
+compararProdPunto(4096)
+compararProdPunto(8192)
+compararProdPunto(16384)
+compararProdPunto(32768)
+compararProdPunto(65536)
+compararProdPunto(131072)
