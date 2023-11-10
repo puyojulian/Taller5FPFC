@@ -84,6 +84,7 @@ package object Matrices {
     // y devuelve la multiplicacion de las 2 matrices
     val l = m1.length
     val mid = l/2
+
     if (l == 2 || l == 1) {
       multMatriz(m1,m2)
     }
@@ -131,7 +132,7 @@ package object Matrices {
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 16
+    val umbral = 4
     val threshold = {
       if (l <= umbral)
         l
@@ -143,38 +144,43 @@ package object Matrices {
       multMatrizRec(m1, m2)
     }
     else {
-      val (m1_00_m2_00, m1_0mid_m2_mid0) = parallel(
-        multMatrizRecPar(
+      val (t1, t2) = (
+        task(multMatrizRecPar(
           subMatriz(m1, 0, 0, mid),
-          subMatriz(m2, 0, 0, mid)),
-        multMatrizRecPar(
+          subMatriz(m2, 0, 0, mid))),
+        task(multMatrizRecPar(
           subMatriz(m1, 0, mid, mid),
-          subMatriz(m2, mid, 0, mid))
+          subMatriz(m2, mid, 0, mid)))
       )
-      val (m1_00_m2_0mid, m1_0mid_m2_midmid) = parallel(
-        multMatrizRecPar(
+      val (t3, t4) = (
+        task(multMatrizRecPar(
           subMatriz(m1, 0, 0, mid),
-          subMatriz(m2, 0, mid, mid)),
-        multMatrizRecPar(
+          subMatriz(m2, 0, mid, mid))),
+        task(multMatrizRecPar(
           subMatriz(m1, 0, mid, mid),
-          subMatriz(m2, mid, mid, mid))
+          subMatriz(m2, mid, mid, mid)))
       )
-      val (m1_mid0_m2_00, m1_midmid_m2_mid0) = parallel(
-        multMatrizRecPar(
+      val (t5, t6) = (
+        task(multMatrizRecPar(
           subMatriz(m1, mid, 0, mid),
-          subMatriz(m2, 0, 0, mid)),
-        multMatrizRecPar(
+          subMatriz(m2, 0, 0, mid))),
+        task(multMatrizRecPar(
           subMatriz(m1, mid, mid, mid),
-          subMatriz(m2, mid, 0, mid))
+          subMatriz(m2, mid, 0, mid)))
       )
-      val (m1_mid0_m2_0mid, m1_midmid_m2_midmid) = parallel(
-        multMatrizRecPar(
+      val (t7, t8) = (
+        task(multMatrizRecPar(
           subMatriz(m1, mid, 0, mid),
-          subMatriz(m2, 0, mid, mid)),
-        multMatrizRecPar(
+          subMatriz(m2, 0, mid, mid))),
+        task(multMatrizRecPar(
           subMatriz(m1, mid, mid, mid),
-          subMatriz(m2, mid, mid, mid))
+          subMatriz(m2, mid, mid, mid)))
       )
+
+      val (m1_00_m2_00, m1_0mid_m2_mid0) = (t1.join, t2.join)
+      val (m1_00_m2_0mid, m1_0mid_m2_midmid) = (t3.join, t4.join)
+      val (m1_mid0_m2_00, m1_midmid_m2_mid0) = (t5.join, t6.join)
+      val (m1_mid0_m2_0mid, m1_midmid_m2_midmid) = (t7.join, t8.join)
 
       val c_00 = sumMatriz(m1_00_m2_00, m1_0mid_m2_mid0)
       val c_0mid = sumMatriz(m1_00_m2_0mid, m1_0mid_m2_midmid)
@@ -192,183 +198,13 @@ package object Matrices {
     Vector.tabulate(l,l)((i,j) => m1(i)(j)-m2(i)(j))
   }
 
-  def multStrassenPrelim(m1: Matriz, m2: Matriz): Matriz = {
-    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
-    // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen
-    val l = m1.length
-    val mid = l / 2
-    if (l == 2 || l == 1) {
-      multMatriz(m1, m2)
-    }
-    else {
-      val (m1_00_m2_0mid, m1_00_m2_midmid) = (
-        multStrassenPrelim(
-          subMatriz(m1,0,0,mid),
-          subMatriz(m2,0,mid,mid)),
-        multStrassenPrelim(
-          subMatriz(m1,0,0,mid),
-          subMatriz(m2,mid,mid,mid))
-      )
-      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = (
-        multStrassenPrelim(
-          subMatriz(m1,0,mid,mid),
-          subMatriz(m2,mid,mid,mid)),
-        multStrassenPrelim(
-          subMatriz(m1,mid,0,mid),
-          subMatriz(m2,0,0,mid))
-      )
-      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = (
-        multStrassenPrelim(
-          subMatriz(m1,mid,mid,mid),
-          subMatriz(m2,0,0,mid)),
-        multStrassenPrelim(
-          subMatriz(m1,mid,mid,mid),
-          subMatriz(m2,mid,mid,mid))
-      )
-      val (m1_midmid_m2_mid0, m1_00_m2_00) = (
-        multStrassenPrelim(
-          subMatriz(m1,mid,mid,mid),
-          subMatriz(m2,mid,0,mid)),
-        multStrassenPrelim(
-          subMatriz(m1,0,0,mid),
-          subMatriz(m2,0,0,mid))
-      )
-      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = (
-        multStrassenPrelim(
-          subMatriz(m1,0,mid,mid),
-          subMatriz(m2,mid,0,mid)),
-        multStrassenPrelim(
-          subMatriz(m1,mid,0,mid),
-          subMatriz(m2,0,mid,mid))
-      )
-
-      val p1 = restaMatriz(m1_00_m2_0mid, m1_00_m2_midmid)
-      val p2 = sumMatriz(m1_00_m2_midmid, m1_0mid_m2_midmid)
-      val p3 = sumMatriz(m1_mid0_m2_00, m1_midmid_m2_00)
-      val p4 = restaMatriz(m1_midmid_m2_mid0, m1_midmid_m2_00)
-      val p5 = sumMatriz(
-        sumMatriz(m1_00_m2_00, m1_00_m2_midmid),
-        sumMatriz(m1_midmid_m2_00, m1_midmid_m2_midmid))
-      val p6 = restaMatriz(
-        restaMatriz(
-          sumMatriz(m1_0mid_m2_mid0, m1_0mid_m2_midmid),
-          m1_midmid_m2_mid0),
-        m1_midmid_m2_midmid
-      )
-      val p7 = restaMatriz(
-        restaMatriz(
-          sumMatriz(m1_00_m2_00, m1_00_m2_0mid),
-          m1_mid0_m2_00
-        ),
-        m1_mid0_m2_0mid
-      )
-
-      val c_00 = sumMatriz(restaMatriz(sumMatriz(p5,p4),p2),p6)
-      val c_0mid = sumMatriz(p1,p2)
-      val c_mid0 = sumMatriz(p3,p4)
-      val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5,p1),p3),p7)
-      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
-    }
-  }
-
-  def multStrassenPrelimPar(m1: Matriz, m2: Matriz): Matriz = {
-    // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
-    // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen en paralelo
-    val l = m1.length
-    val mid = l / 2
-
-    val umbral = 8
-    val threshold = {
-      if (l <= umbral)
-        l
-      else
-        umbral
-    }
-
-    if (l == threshold) { // 'threshold' define si se usa el algoritmo secuencial o paralelo.
-      multStrassenPrelim(m1, m2)
-    }
-    else {
-      val (m1_00_m2_0mid, m1_00_m2_midmid) = parallel(
-        multStrassenPrelimPar(
-          subMatriz(m1, 0, 0, mid),
-          subMatriz(m2, 0, mid, mid)),
-        multStrassenPrelimPar(
-          subMatriz(m1, 0, 0, mid),
-          subMatriz(m2, mid, mid, mid))
-      )
-      val (m1_0mid_m2_midmid, m1_mid0_m2_00) = parallel(
-        multStrassenPrelimPar(
-          subMatriz(m1, 0, mid, mid),
-          subMatriz(m2, mid, mid, mid)),
-        multStrassenPrelimPar(
-          subMatriz(m1, mid, 0, mid),
-          subMatriz(m2, 0, 0, mid))
-      )
-      val (m1_midmid_m2_00, m1_midmid_m2_midmid) = parallel(
-        multStrassenPrelimPar(
-          subMatriz(m1, mid, mid, mid),
-          subMatriz(m2, 0, 0, mid)),
-        multStrassenPrelimPar(
-          subMatriz(m1, mid, mid, mid),
-          subMatriz(m2, mid, mid, mid))
-      )
-      val (m1_midmid_m2_mid0, m1_00_m2_00) = parallel(
-        multStrassenPrelimPar(
-          subMatriz(m1, mid, mid, mid),
-          subMatriz(m2, mid, 0, mid)),
-        multStrassenPrelimPar(
-          subMatriz(m1, 0, 0, mid),
-          subMatriz(m2, 0, 0, mid))
-      )
-      val (m1_0mid_m2_mid0, m1_mid0_m2_0mid) = parallel(
-        multStrassenPrelimPar(
-          subMatriz(m1, 0, mid, mid),
-          subMatriz(m2, mid, 0, mid)),
-        multStrassenPrelimPar(
-          subMatriz(m1, mid, 0, mid),
-          subMatriz(m2, 0, mid, mid))
-      )
-
-      val p1 = restaMatriz(m1_00_m2_0mid, m1_00_m2_midmid)
-      val p2 = sumMatriz(m1_00_m2_midmid, m1_0mid_m2_midmid)
-      val p3 = sumMatriz(m1_mid0_m2_00, m1_midmid_m2_00)
-      val p4 = restaMatriz(m1_midmid_m2_mid0, m1_midmid_m2_00)
-      val p5 = sumMatriz(
-        sumMatriz(
-          m1_00_m2_00,
-          m1_00_m2_midmid),
-        sumMatriz(
-          m1_midmid_m2_00,
-          m1_midmid_m2_midmid)
-      )
-      val p6 = restaMatriz(
-        restaMatriz(
-          sumMatriz(m1_0mid_m2_mid0, m1_0mid_m2_midmid),
-          m1_midmid_m2_mid0),
-        m1_midmid_m2_midmid
-      )
-      val p7 = restaMatriz(
-        restaMatriz(
-          sumMatriz(m1_00_m2_00, m1_00_m2_0mid),
-          m1_mid0_m2_00),
-        m1_mid0_m2_0mid
-      )
-
-      val c_00 = sumMatriz(restaMatriz(sumMatriz(p5, p4), p2), p6)
-      val c_0mid = sumMatriz(p1, p2)
-      val c_mid0 = sumMatriz(p3, p4)
-      val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5, p1), p3), p7)
-      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
-    }
-  }
-
   // Ejercicio 1.3.2
   def multStrassen(m1: Matriz, m2: Matriz): Matriz = {
     // recibe m1 y m2 matrices cuadradas de la misma dimension, potencia de 2
     // y devuelve la multiplicacion de las 2 matrices usando el algoritmo de Strassen
     val l = m1.length
     val mid = l / 2
+
     if (l == 2 || l == 1) {
       multMatriz(m1, m2)
     }
@@ -433,7 +269,7 @@ package object Matrices {
       val c_0mid = sumMatriz(p1, p2)
       val c_mid0 = sumMatriz(p3, p4)
       val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5, p1), p3), p7)
-      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
+      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map {case (row1, row2) => row1 ++ row2}
     }
   }
 
@@ -444,7 +280,7 @@ package object Matrices {
     val l = m1.length
     val mid = l / 2
 
-    val umbral = 16
+    val umbral = 4
     val threshold = {
       if (l <= umbral)
         l
@@ -456,66 +292,78 @@ package object Matrices {
       multStrassen(m1, m2)
     }
     else {
-      val (s1, s2) = parallel(
-        restaMatriz(
+      val (t1, t2) = (
+        task(restaMatriz(
           subMatriz(m2, 0, mid, mid),
-          subMatriz(m2, mid, mid, mid)),
-        sumMatriz(
+          subMatriz(m2, mid, mid, mid))),
+        task(sumMatriz(
           subMatriz(m1, 0, 0, mid),
-          subMatriz(m1, 0, mid, mid))
+          subMatriz(m1, 0, mid, mid)))
       )
-      val (s3, s4) = parallel(
-        sumMatriz(
+      val (t3, t4) = (
+        task(sumMatriz(
           subMatriz(m1, mid, 0, mid),
-          subMatriz(m1, mid, mid, mid)),
-        restaMatriz(
+          subMatriz(m1, mid, mid, mid))),
+        task(restaMatriz(
           subMatriz(m2, mid, 0, mid),
-          subMatriz(m2, 0, 0, mid))
+          subMatriz(m2, 0, 0, mid)))
       )
-      val (s5, s6) = parallel(
-        sumMatriz(
+      val (t5, t6) = (
+        task(sumMatriz(
           subMatriz(m1, 0, 0, mid),
-          subMatriz(m1, mid, mid, mid)),
-        sumMatriz(
+          subMatriz(m1, mid, mid, mid))),
+        task(sumMatriz(
           subMatriz(m2, 0, 0, mid),
-          subMatriz(m2, mid, mid, mid))
+          subMatriz(m2, mid, mid, mid)))
       )
-      val (s7, s8) = parallel(
-        restaMatriz(
+      val (t7, t8) = (
+        task(restaMatriz(
           subMatriz(m1, 0, mid, mid),
-          subMatriz(m1, mid, mid, mid)),
-        sumMatriz(
+          subMatriz(m1, mid, mid, mid))),
+        task(sumMatriz(
           subMatriz(m2, mid, 0, mid),
-          subMatriz(m2, mid, mid, mid))
+          subMatriz(m2, mid, mid, mid)))
       )
-      val (s9, s10) = parallel(
-        restaMatriz(
+      val (t9, t10) = (
+        task(restaMatriz(
           subMatriz(m1, 0, 0, mid),
-          subMatriz(m1, mid, 0, mid)),
-        sumMatriz(
+          subMatriz(m1, mid, 0, mid))),
+        task(sumMatriz(
           subMatriz(m2, 0, 0, mid),
-          subMatriz(m2, 0, mid, mid))
+          subMatriz(m2, 0, mid, mid)))
       )
 
-      val (p1, p2) = parallel(
-        multStrassenPar(subMatriz(m1, 0, 0, mid), s1),
-        multStrassenPar(s2, subMatriz(m2, mid, mid, mid))
+      val (s1, s2) = (t1.join, t2.join)
+      val (s3, s4) = (t3.join, t4.join)
+      val (s5, s6) = (t5.join,t6.join)
+      val (s7, s8) = (t7.join, t8.join)
+      val (s9, s10) = (t9.join, t10.join)
+
+
+      val (t11, t12) = (
+        task(multStrassenPar(subMatriz(m1, 0, 0, mid), s1)),
+        task(multStrassenPar(s2, subMatriz(m2, mid, mid, mid)))
       )
-      val (p3, p4) = parallel(
-        multStrassenPar(s3, subMatriz(m2, 0, 0, mid)),
-        multStrassenPar(subMatriz(m1, mid, mid, mid), s4)
+      val (t13, t14) = (
+        task(multStrassenPar(s3, subMatriz(m2, 0, 0, mid))),
+        task(multStrassenPar(subMatriz(m1, mid, mid, mid), s4))
       )
-      val (p5, p6) = parallel(
-        multStrassenPar(s5, s6),
-        multStrassenPar(s7, s8)
+      val (t15, t16) = (
+        task(multStrassenPar(s5, s6)),
+        task(multStrassenPar(s7, s8))
       )
-      val p7 = multStrassenPar(s9, s10)
+      val t17 = task(multStrassenPar(s9, s10))
+
+      val (p1, p2) = (t11.join, t12.join)
+      val (p3, p4) = (t13.join, t14.join)
+      val (p5, p6) = (t15.join, t16.join)
+      val p7 = t17.join
 
       val c_00 = sumMatriz(restaMatriz(sumMatriz(p5, p4), p2), p6)
       val c_0mid = sumMatriz(p1, p2)
       val c_mid0 = sumMatriz(p3, p4)
       val c_midmid = restaMatriz(restaMatriz(sumMatriz(p5, p1), p3), p7)
-      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map { case (row1, row2) => row1 ++ row2 }
+      (c_00 ++ c_mid0).zip(c_0mid ++ c_midmid).map {case (row1, row2) => row1 ++ row2}
     }
   }
 }
