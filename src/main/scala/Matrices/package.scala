@@ -1,3 +1,11 @@
+/*
+  Archivo: package.scala
+  Autores:  Julian Ernesto Puyo Mora <julian.puyo@correounivalle.edu.co> <202226905>
+            Sebastian Orrego Marin <orrego.sebastian@correounivalle.edu.co> <201941144>
+  N° Taller: 05
+  Fecha de realización: 10/11/2023
+*/
+
 import common._
 import scala.collection.parallel.immutable.ParVector
 import scala.util.Random
